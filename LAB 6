@@ -1,0 +1,300 @@
+a) WAP to Implement Single Link List with following 
+
+operations: Sort the linked list, Reverse the linked list, 
+
+Concatenation of two linked lists
+
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define structure for a linked list node
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Function prototypes
+struct Node* createNode(int data);
+void insertAtEnd(struct Node** head, int data);
+void displayList(struct Node* head);
+void sortList(struct Node** head);
+void reverseList(struct Node** head);
+void concatenateLists(struct Node** head1, struct Node** head2);
+
+int main() {
+    struct Node* list1 = NULL;
+    struct Node* list2 = NULL;
+    int choice, data;
+
+    while (1) {
+        printf("\nMenu:\n");
+        printf("1. Insert into List 1\n");
+        printf("2. Insert into List 2\n");
+        printf("3. Display List 1\n");
+        printf("4. Display List 2\n");
+        printf("5. Sort List 1\n");
+        printf("6. Reverse List 1\n");
+        printf("7. Concatenate List 2 into List 1\n");
+        printf("8. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter data to insert into List 1: ");
+                scanf("%d", &data);
+                insertAtEnd(&list1, data);
+                break;
+            case 2:
+                printf("Enter data to insert into List 2: ");
+                scanf("%d", &data);
+                insertAtEnd(&list2, data);
+                break;
+            case 3:
+                printf("List 1: ");
+                displayList(list1);
+                break;
+            case 4:
+                printf("List 2: ");
+                displayList(list2);
+                break;
+            case 5:
+                sortList(&list1);
+                printf("List 1 sorted.\n");
+                break;
+            case 6:
+                reverseList(&list1);
+                printf("List 1 reversed.\n");
+                break;
+            case 7:
+                concatenateLists(&list1, &list2);
+                printf("List 2 concatenated into List 1.\n");
+                break;
+            case 8:
+                printf("Exiting program. Goodbye!\n");
+                return 0;
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    }
+    return 0;
+}
+
+// Function to create a new node
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to insert a node at the end of the list
+void insertAtEnd(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+    struct Node* temp = *head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+}
+
+// Function to display the linked list
+void displayList(struct Node* head) {
+    if (head == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+    struct Node* temp = head;
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+// Function to sort the linked list
+void sortList(struct Node** head) {
+    if (*head == NULL || (*head)->next == NULL) {
+        return;
+    }
+    struct Node* i, *j;
+    int temp;
+    for (i = *head; i != NULL; i = i->next) {
+        for (j = i->next; j != NULL; j = j->next) {
+            if (i->data > j->data) {
+                temp = i->data;
+                i->data = j->data;
+                j->data = temp;
+            }
+        }
+    }
+}
+
+// Function to reverse the linked list
+void reverseList(struct Node** head) {
+    struct Node *prev = NULL, *current = *head, *next = NULL;
+    while (current != NULL) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+    *head = prev;
+}
+
+// Function to concatenate two linked lists
+void concatenateLists(struct Node** head1, struct Node** head2) {
+    if (*head1 == NULL) {
+        *head1 = *head2;
+        *head2 = NULL;
+        return;
+    }
+    struct Node* temp = *head1;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = *head2;
+    *head2 = NULL;
+}
+
+
+
+b) WAP to Implement Single Link List to simulate Stack & 
+
+Queue Operations.
+
+
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define the structure of a node
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Function prototypes
+struct Node* createNode(int data);
+void push(struct Node** top, int data); // Stack push
+int pop(struct Node** top); // Stack pop
+void enqueue(struct Node** front, struct Node** rear, int data); // Queue enqueue
+int dequeue(struct Node** front); // Queue dequeue
+void display(struct Node* head);
+
+int main() {
+    struct Node *stack = NULL, *queueFront = NULL, *queueRear = NULL;
+    int choice, data;
+
+    printf("Operations:\n1. Push (Stack)\n2. Pop (Stack)\n3. Enqueue (Queue)\n4. Dequeue (Queue)\n5. Display Stack\n6. Display Queue\n7. Exit\n");
+
+    while (1) {
+        printf("\nEnter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter data to push: ");
+                scanf("%d", &data);
+                push(&stack, data);
+                break;
+
+            case 2:
+                data = pop(&stack);
+                if (data != -1) printf("Popped: %d\n", data);
+                break;
+
+            case 3:
+                printf("Enter data to enqueue: ");
+                scanf("%d", &data);
+                enqueue(&queueFront, &queueRear, data);
+                break;
+
+            case 4:
+                data = dequeue(&queueFront);
+                if (data != -1) printf("Dequeued: %d\n", data);
+                break;
+
+            case 5:
+                printf("Stack: ");
+                display(stack);
+                break;
+
+            case 6:
+                printf("Queue: ");
+                display(queueFront);
+                break;
+
+            case 7:
+                exit(0);
+
+            default:
+                printf("Invalid choice.\n");
+        }
+    }
+    return 0;
+}
+
+// Function to create a new node
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Push operation for stack
+void push(struct Node** top, int data) {
+    struct Node* newNode = createNode(data);
+    newNode->next = *top;
+    *top = newNode;
+}
+
+// Pop operation for stack
+int pop(struct Node** top) {
+    if (*top == NULL) {
+        printf("Stack Underflow\n");
+        return -1;
+    }
+    int data = (*top)->data;
+    struct Node* temp = *top;
+    *top = (*top)->next;
+    free(temp);
+    return data;
+}
+
+// Enqueue operation for queue
+void enqueue(struct Node** front, struct Node** rear, int data) {
+    struct Node* newNode = createNode(data);
+    if (*rear == NULL) {
+        *front = *rear = newNode;
+    } else {
+        (*rear)->next = newNode;
+        *rear = newNode;
+    }
+}
+
+// Dequeue operation for queue
+int dequeue(struct Node** front) {
+    if (*front == NULL) {
+        printf("Queue Underflow\n");
+        return -1;
+    }
+    int data = (*front)->data;
+    struct Node* temp = *front;
+    *front = (*front)->next;
+    free(temp);
+    return data;
+}
+
+// Display the linked list
+void display(struct Node* head) {
+    struct Node* temp = head;
+    while (temp) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n")
