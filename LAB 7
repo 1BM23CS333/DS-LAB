@@ -1,0 +1,151 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define the structure for a doubly linked list node
+struct Node {
+    int data;
+    struct Node* prev;
+    struct Node* next;
+};
+
+// Function prototypes
+struct Node* createNode(int data);
+void insertAtBeginning(struct Node** head, int data);
+void insertAtEnd(struct Node** head, int data);
+void insertAtPosition(struct Node** head, int data, int position);
+void displayList(struct Node* head);
+
+// Main function
+int main() {
+    struct Node* head = NULL;
+    int choice, data, position;
+
+    while (1) {
+        printf("\nDoubly Linked List Operations:\n");
+        printf("1. Create a doubly linked list (Add at the end)\n");
+        printf("2. Insert a new node at the beginning\n");
+        printf("3. Insert a new node at a specific location\n");
+        printf("4. Insert a new node at the end\n");
+        printf("5. Display the contents of the list\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter data to insert at the end: ");
+                scanf("%d", &data);
+                insertAtEnd(&head, data);
+                break;
+            case 2:
+                printf("Enter data to insert at the beginning: ");
+                scanf("%d", &data);
+                insertAtBeginning(&head, data);
+                break;
+            case 3:
+                printf("Enter the position to insert: ");
+                scanf("%d", &position);
+                printf("Enter data to insert: ");
+                scanf("%d", &data);
+                insertAtPosition(&head, data, position);
+                break;
+            case 4:
+                printf("Enter data to insert at the end: ");
+                scanf("%d", &data);
+                insertAtEnd(&head, data);
+                break;
+            case 5:
+                displayList(head);
+                break;
+            case 6:
+                printf("Exiting...\n");
+                exit(0);
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    }
+
+    return 0;
+}
+
+// Function to create a new node
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to insert a node at the beginning
+void insertAtBeginning(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    if (*head != NULL) {
+        newNode->next = *head;
+        (*head)->prev = newNode;
+    }
+    *head = newNode;
+}
+
+// Function to insert a node at the end
+void insertAtEnd(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+    struct Node* temp = *head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+    newNode->prev = temp;
+}
+
+// Function to insert a node at a specific position
+void insertAtPosition(struct Node** head, int data, int position) {
+    if (position < 1) {
+        printf("Invalid position!\n");
+        return;
+    }
+
+    struct Node* newNode = createNode(data);
+    if (position == 1) {
+        insertAtBeginning(head, data);
+        return;
+    }
+
+    struct Node* temp = *head;
+    for (int i = 1; i < position - 1 && temp != NULL; i++) {
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Position out of range!\n");
+        return;
+    }
+
+    newNode->next = temp->next;
+    if (temp->next != NULL) {
+        temp->next->prev = newNode;
+    }
+    temp->next = newNode;
+    newNode->prev = temp;
+}
+
+// Function to display the contents of the list
+void displayList(struct Node* head) {
+    if (head == NULL) {
+        printf("The list is empty.\n");
+        return;
+    }
+
+    printf("Doubly Linked List: ");
+    struct Node* temp = head;
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
