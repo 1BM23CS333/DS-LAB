@@ -1,0 +1,129 @@
+9a) Write a program to traverse a graph using BFS method.
+
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 100
+
+int adj[MAX][MAX];
+int visited[MAX];
+int queue[MAX];
+int front = -1, rear = -1;
+
+// Add to queue
+void enqueue(int node) {
+    if (rear == MAX - 1) return;
+    if (front == -1) front = 0;
+    queue[++rear] = node;
+}
+
+// Remove from queue
+int dequeue() {
+    if (front == -1 || front > rear) return -1;
+    return queue[front++];
+}
+
+// Breadth-First Search
+void bfs(int start, int n) {
+    printf("BFS Traversal: ");
+    visited[start] = 1;
+    enqueue(start);
+
+    while (front <= rear) {
+        int current = dequeue();
+        printf("%d ", current);
+
+        for (int i = 0; i < n; i++) {
+            if (adj[current][i] == 1 && !visited[i]) {
+                visited[i] = 1;
+                enqueue(i);
+            }
+        }
+    }
+    printf("\n");
+}
+
+int main() {
+    int n, edges, start, u, v;
+
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+
+    // Initialize adjacency matrix and visited array
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) adj[i][j] = 0;
+        visited[i] = 0;
+    }
+
+    printf("Enter number of edges: ");
+    scanf("%d", &edges);
+
+    printf("Enter edges (u v):\n");
+    for (int i = 0; i < edges; i++) {
+        scanf("%d %d", &u, &v);
+        adj[u][v] = 1;
+        adj[v][u] = 1; // For undirected graph
+    }
+
+    printf("Enter starting vertex for BFS traversal: ");
+    scanf("%d", &start);
+
+    // BFS
+    bfs(start, n);
+
+    return 0;
+}
+
+
+9b) Write a program to traverse a graph using DFS method.
+
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 100
+
+int adj[MAX][MAX];
+int visited[MAX];
+
+// Depth-First Search
+void dfs(int node, int n) {
+    printf("%d ", node);
+    visited[node] = 1;
+
+    for (int i = 0; i < n; i++) {
+        if (adj[node][i] == 1 && !visited[i]) {
+            dfs(i, n);
+        }
+    }
+}
+
+int main() {
+    int n, edges, start, u, v;
+
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+
+    // Initialize adjacency matrix and visited array
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) adj[i][j] = 0;
+        visited[i] = 0;
+    }
+
+    printf("Enter number of edges: ");
+    scanf("%d", &edges);
+
+    printf("Enter edges (u v):\n");
+    for (int i = 0; i < edges; i++) {
+        scanf("%d %d", &u, &v);
+        adj[u][v] = 1;
+        adj[v][u] = 1; // For undirected graph
+    }
+
+    printf("Enter starting vertex for DFS traversal: ");
+    scanf("%d", &start);
+
+    // DFS
+    printf("DFS Traversal: ");
+    dfs(start, n);
+    printf("\n");
+
+    return 0;
+}
